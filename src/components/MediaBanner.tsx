@@ -4,8 +4,7 @@ import { CustomBanner, type CustomBannerProps } from "../primitives/CustomBanner
 import type { CTA, MediaSpec } from "../types/ad";
 import { cn } from "../utils/cn";
 
-export interface MediaBannerProps
-  extends Omit<CustomBannerProps, "children" | "componentType"> {
+export interface MediaBannerProps extends Omit<CustomBannerProps, "children" | "componentType"> {
   title?: string;
   subtitle?: string;
   eyebrow?: string;
@@ -26,7 +25,7 @@ function MediaRenderer({ media }: { media: MediaSpec }): ReactNode {
     if (media.svg) {
       return (
         <span
-          className="bba-banner-media__svg"
+          className="bb-banner-media__svg"
           aria-hidden={media.alt ? undefined : true}
           {...(media.alt ? { role: "img", "aria-label": media.alt } : {})}
           dangerouslySetInnerHTML={{ __html: media.svg }}
@@ -38,14 +37,14 @@ function MediaRenderer({ media }: { media: MediaSpec }): ReactNode {
         <img
           src={media.src}
           alt={media.alt ?? ""}
-          className="bba-banner-media__svg"
+          className="bb-banner-media__svg"
           loading="lazy"
         />
       );
     }
     if (isDev()) {
       console.warn(
-        "[beautiful-banner-ads] <MediaBanner> media.type='svg' needs either `svg` (inline markup) or `src`.",
+        "[brand-banners] <MediaBanner> media.type='svg' needs either `svg` (inline markup) or `src`.",
       );
     }
     return null;
@@ -54,24 +53,19 @@ function MediaRenderer({ media }: { media: MediaSpec }): ReactNode {
   if (media.type === "image" || media.type === "gif") {
     if (!media.src) {
       if (isDev()) {
-        console.warn(`[beautiful-banner-ads] <MediaBanner> media.type='${media.type}' requires \`src\`.`);
+        console.warn(`[brand-banners] <MediaBanner> media.type='${media.type}' requires \`src\`.`);
       }
       return null;
     }
     return (
-      <img
-        src={media.src}
-        alt={media.alt ?? ""}
-        className="bba-banner-media__img"
-        loading="lazy"
-      />
+      <img src={media.src} alt={media.alt ?? ""} className="bb-banner-media__img" loading="lazy" />
     );
   }
 
   if (media.type === "video") {
     if (!media.src) {
       if (isDev()) {
-        console.warn("[beautiful-banner-ads] <MediaBanner> media.type='video' requires `src`.");
+        console.warn("[brand-banners] <MediaBanner> media.type='video' requires `src`.");
       }
       return null;
     }
@@ -80,7 +74,7 @@ function MediaRenderer({ media }: { media: MediaSpec }): ReactNode {
         <img
           src={media.poster}
           alt={media.alt ?? ""}
-          className="bba-banner-media__video-poster"
+          className="bb-banner-media__video-poster"
           loading="lazy"
         />
       );
@@ -93,7 +87,7 @@ function MediaRenderer({ media }: { media: MediaSpec }): ReactNode {
         loop={media.loop ?? true}
         muted={media.muted ?? true}
         playsInline
-        className="bba-banner-media__video"
+        className="bb-banner-media__video"
         {...(media.alt ? { "aria-label": media.alt } : { "aria-hidden": true })}
       />
     );
@@ -102,21 +96,9 @@ function MediaRenderer({ media }: { media: MediaSpec }): ReactNode {
   return null;
 }
 
-function MediaBannerInner(
-  props: MediaBannerProps,
-  forwardedRef: ForwardedRef<HTMLDivElement>,
-) {
-  const {
-    title,
-    subtitle,
-    eyebrow,
-    finePrint,
-    cta,
-    media,
-    config,
-    className,
-    ...customProps
-  } = props;
+function MediaBannerInner(props: MediaBannerProps, forwardedRef: ForwardedRef<HTMLDivElement>) {
+  const { title, subtitle, eyebrow, finePrint, cta, media, config, className, ...customProps } =
+    props;
 
   const mergedTitle = title ?? config?.title;
   const mergedSubtitle = subtitle ?? config?.subtitle;
@@ -126,7 +108,7 @@ function MediaBannerInner(
   const mergedMedia = media ?? config?.media;
 
   if (!mergedMedia && isDev()) {
-    console.warn("[beautiful-banner-ads] <MediaBanner> requires a `media` prop (or config.media).");
+    console.warn("[brand-banners] <MediaBanner> requires a `media` prop (or config.media).");
   }
 
   return (
@@ -134,7 +116,7 @@ function MediaBannerInner(
       ref={forwardedRef}
       componentType="MediaBanner"
       config={config}
-      className={cn("bba-banner-media", className)}
+      className={cn("bb-banner-media", className)}
       {...customProps}
     >
       {mergedMedia && (

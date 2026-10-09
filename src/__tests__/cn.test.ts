@@ -20,6 +20,6 @@ describe("cn()", () => {
   });
 
   it("preserves order so later classes win the CSS cascade", () => {
-    expect(cn("bba-default", "user-override")).toBe("bba-default user-override");
+    expect(cn("bb-default", "user-override")).toBe("bb-default user-override");
   });
 });

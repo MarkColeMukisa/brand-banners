@@ -1,6 +1,37 @@
 # Changelog
 
-All notable changes to `beautiful-banner-ads` are documented here. Format adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows [SemVer](https://semver.org/).
+All notable changes to `brand-banners` are documented here. Format adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows [SemVer](https://semver.org/).
+
+## [0.1.0] — unreleased
+
+First release under the `brand-banners` name. Forked from `beautiful-banner-ads` 0.4.0 by MUKE JOHNBAPTIST.
+
+### Added
+
+- **`BrandBanners`**: the whole integration in one component. A rotating, dismissible corner card built from `AdSlot` + `BrandedBanner`, with `interval`, `dismissDays`, `corner`, `offset`, `width`, `layout`, `position` and the analytics callbacks as its only options.
+- **`size="card"`**: a content-height preset (CTA under the text, optional square image column, close button docked top-right) for corner slots and sidebars. Nothing clips at narrow widths.
+- **`dismissScope` on `AdSlot`**: `"ad"` skips the closed ad and carries on; `"slot"` hides the whole slot. Plus an `id` prop that names the slot in its storage key.
+- The published bundle is marked `"use client"`, so it imports directly into a Next.js App Router server component.
+
+### Changed
+
+- **CSS prefix is `bb-`** (was `bba-`): classes, `--bb-*` tokens, `data-bb-*` attributes, Tailwind utilities and `bb-dismissed:*` storage keys. Both packages can now be on one page without sharing a style tag.
+- **Styles hold up against host CSS.** Rules for the banner root weigh one class and rules for the parts inside weigh two, instead of zero, so a host page's `h2`, `a`, `button`, `img` or `.content h2` rules no longer restyle banners. A consumer `className` on the banner and `.your-class .bb-banner__*` selectors still override.
+- `onView` fires for every ad a rotating slot shows, not only the first.
+- `layout="image-right"` orders the row as text, CTA, image, close button. It no longer reverses the row or overrides the column direction of `halfpage` / `social`.
+- An already-dismissed banner is hidden before first paint in client-rendered apps (the storage lookup moved to a layout effect).
+- Ads without an `id` get a stable positional storage key (`bb-dismissed:idx-0`) inside an `AdSlot`.
+- `VERSION` is injected from `package.json` at build time.
+
+### Fixed
+
+- Closing one ad in a rotating slot hid the slot for the rest of the page view but only remembered that one ad, so the slot reappeared on the next visit until rotation reached it.
+- The close button used the page theme's text colour and disappeared on dark brand gradients; it now inherits the banner's text colour.
+- A fully dismissed `AdSlot` left an empty positioned wrapper in the page.
+
+---
+
+# History before the fork (`beautiful-banner-ads`)
 
 ## [0.1.0] — 2026-06-05
 

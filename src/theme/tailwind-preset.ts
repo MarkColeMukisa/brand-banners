@@ -1,133 +1,133 @@
 /**
- * beautiful-banner-ads — Tailwind preset.
+ * brand-banners — Tailwind preset.
  *
  * Mirrors every design token from `design-style-guide.md` (and `css-source.ts`)
  * as Tailwind theme extensions. Every value resolves to the same CSS custom
- * property used at runtime (`var(--bba-*)`), so light/dark/system theme
+ * property used at runtime (`var(--bb-*)`), so light/dark/system theme
  * switching keeps working automatically — Tailwind doesn't need its own
  * darkMode strategy for these utilities.
  *
  * Usage (Tailwind v3+):
  *
- *   import bbaPreset from "beautiful-banner-ads/tailwind-preset";
+ *   import bbPreset from "brand-banners/tailwind-preset";
  *
  *   export default {
- *     presets: [bbaPreset],
+ *     presets: [bbPreset],
  *     content: ["./src/your-glob-here"],
  *   };
  *
- * Then utilities like `bg-bba-surface`, `text-bba-on-brand`,
- * `rounded-bba-lg`, etc. become available. The full token table lives in
+ * Then utilities like `bg-bb-surface`, `text-bb-on-brand`,
+ * `rounded-bb-lg`, etc. become available. The full token table lives in
  * `design-style-guide.md` §10.
  */
 const preset = {
   theme: {
     extend: {
       colors: {
-        "bba-brand": {
-          900: "var(--bba-brand-900)",
-          800: "var(--bba-brand-800)",
-          700: "var(--bba-brand-700)",
-          600: "var(--bba-brand-600)",
+        "bb-brand": {
+          900: "var(--bb-brand-900)",
+          800: "var(--bb-brand-800)",
+          700: "var(--bb-brand-700)",
+          600: "var(--bb-brand-600)",
         },
-        "bba-accent": {
-          300: "var(--bba-accent-300)",
-          500: "var(--bba-accent-500)",
-          600: "var(--bba-accent-600)",
+        "bb-accent": {
+          300: "var(--bb-accent-300)",
+          500: "var(--bb-accent-500)",
+          600: "var(--bb-accent-600)",
         },
-        "bba-pop": {
-          500: "var(--bba-pop-500)",
-          600: "var(--bba-pop-600)",
+        "bb-pop": {
+          500: "var(--bb-pop-500)",
+          600: "var(--bb-pop-600)",
         },
-        bba: {
-          bg: "var(--bba-bg)",
-          surface: "var(--bba-surface)",
-          "surface-2": "var(--bba-surface-2)",
-          text: "var(--bba-text)",
-          "text-muted": "var(--bba-text-muted)",
-          border: "var(--bba-border)",
-          "on-brand": "var(--bba-on-brand)",
-          "on-accent": "var(--bba-on-accent)",
-          "cta-bg": "var(--bba-cta-bg)",
-          "cta-text": "var(--bba-cta-text)",
-          "cta-bg-hover": "var(--bba-cta-bg-hover)",
-          "focus-ring": "var(--bba-focus-ring)",
-          overlay: "var(--bba-overlay)",
+        bb: {
+          bg: "var(--bb-bg)",
+          surface: "var(--bb-surface)",
+          "surface-2": "var(--bb-surface-2)",
+          text: "var(--bb-text)",
+          "text-muted": "var(--bb-text-muted)",
+          border: "var(--bb-border)",
+          "on-brand": "var(--bb-on-brand)",
+          "on-accent": "var(--bb-on-accent)",
+          "cta-bg": "var(--bb-cta-bg)",
+          "cta-text": "var(--bb-cta-text)",
+          "cta-bg-hover": "var(--bb-cta-bg-hover)",
+          "focus-ring": "var(--bb-focus-ring)",
+          overlay: "var(--bb-overlay)",
         },
       },
       fontFamily: {
-        "bba-heading": ["var(--bba-font-heading)"],
-        "bba-body": ["var(--bba-font-body)"],
-        "bba-display": ["var(--bba-font-display)"],
+        "bb-heading": ["var(--bb-font-heading)"],
+        "bb-body": ["var(--bb-font-body)"],
+        "bb-display": ["var(--bb-font-display)"],
       },
       fontSize: {
-        "bba-xs": "var(--bba-fs-xs)",
-        "bba-sm": "var(--bba-fs-sm)",
-        "bba-base": "var(--bba-fs-base)",
-        "bba-lg": "var(--bba-fs-lg)",
-        "bba-xl": "var(--bba-fs-xl)",
-        "bba-2xl": "var(--bba-fs-2xl)",
-        "bba-3xl": "var(--bba-fs-3xl)",
+        "bb-xs": "var(--bb-fs-xs)",
+        "bb-sm": "var(--bb-fs-sm)",
+        "bb-base": "var(--bb-fs-base)",
+        "bb-lg": "var(--bb-fs-lg)",
+        "bb-xl": "var(--bb-fs-xl)",
+        "bb-2xl": "var(--bb-fs-2xl)",
+        "bb-3xl": "var(--bb-fs-3xl)",
       },
       fontWeight: {
-        "bba-regular": "var(--bba-fw-regular)",
-        "bba-medium": "var(--bba-fw-medium)",
-        "bba-semibold": "var(--bba-fw-semibold)",
-        "bba-bold": "var(--bba-fw-bold)",
-        "bba-black": "var(--bba-fw-black)",
+        "bb-regular": "var(--bb-fw-regular)",
+        "bb-medium": "var(--bb-fw-medium)",
+        "bb-semibold": "var(--bb-fw-semibold)",
+        "bb-bold": "var(--bb-fw-bold)",
+        "bb-black": "var(--bb-fw-black)",
       },
       lineHeight: {
-        "bba-tight": "var(--bba-lh-tight)",
-        "bba-snug": "var(--bba-lh-snug)",
-        "bba-normal": "var(--bba-lh-normal)",
+        "bb-tight": "var(--bb-lh-tight)",
+        "bb-snug": "var(--bb-lh-snug)",
+        "bb-normal": "var(--bb-lh-normal)",
       },
       letterSpacing: {
-        "bba-tight": "var(--bba-ls-tight)",
-        "bba-normal": "var(--bba-ls-normal)",
-        "bba-wide": "var(--bba-ls-wide)",
+        "bb-tight": "var(--bb-ls-tight)",
+        "bb-normal": "var(--bb-ls-normal)",
+        "bb-wide": "var(--bb-ls-wide)",
       },
       spacing: {
-        "bba-0": "var(--bba-space-0)",
-        "bba-1": "var(--bba-space-1)",
-        "bba-2": "var(--bba-space-2)",
-        "bba-3": "var(--bba-space-3)",
-        "bba-4": "var(--bba-space-4)",
-        "bba-5": "var(--bba-space-5)",
-        "bba-6": "var(--bba-space-6)",
-        "bba-8": "var(--bba-space-8)",
-        "bba-10": "var(--bba-space-10)",
-        "bba-12": "var(--bba-space-12)",
+        "bb-0": "var(--bb-space-0)",
+        "bb-1": "var(--bb-space-1)",
+        "bb-2": "var(--bb-space-2)",
+        "bb-3": "var(--bb-space-3)",
+        "bb-4": "var(--bb-space-4)",
+        "bb-5": "var(--bb-space-5)",
+        "bb-6": "var(--bb-space-6)",
+        "bb-8": "var(--bb-space-8)",
+        "bb-10": "var(--bb-space-10)",
+        "bb-12": "var(--bb-space-12)",
       },
       borderRadius: {
-        "bba-sm": "var(--bba-radius-sm)",
-        "bba-md": "var(--bba-radius-md)",
-        "bba-lg": "var(--bba-radius-lg)",
-        "bba-xl": "var(--bba-radius-xl)",
-        "bba-pill": "var(--bba-radius-pill)",
+        "bb-sm": "var(--bb-radius-sm)",
+        "bb-md": "var(--bb-radius-md)",
+        "bb-lg": "var(--bb-radius-lg)",
+        "bb-xl": "var(--bb-radius-xl)",
+        "bb-pill": "var(--bb-radius-pill)",
       },
       boxShadow: {
-        "bba-sm": "var(--bba-shadow-sm)",
-        "bba-md": "var(--bba-shadow-md)",
-        "bba-lg": "var(--bba-shadow-lg)",
-        "bba-cta": "var(--bba-shadow-cta)",
+        "bb-sm": "var(--bb-shadow-sm)",
+        "bb-md": "var(--bb-shadow-md)",
+        "bb-lg": "var(--bb-shadow-lg)",
+        "bb-cta": "var(--bb-shadow-cta)",
       },
       transitionDuration: {
-        "bba-fast": "var(--bba-dur-fast)",
-        "bba-base": "var(--bba-dur-base)",
-        "bba-slow": "var(--bba-dur-slow)",
+        "bb-fast": "var(--bb-dur-fast)",
+        "bb-base": "var(--bb-dur-base)",
+        "bb-slow": "var(--bb-dur-slow)",
       },
       transitionTimingFunction: {
-        "bba-out": "var(--bba-ease-out)",
-        "bba-in-out": "var(--bba-ease-in-out)",
+        "bb-out": "var(--bb-ease-out)",
+        "bb-in-out": "var(--bb-ease-in-out)",
       },
       zIndex: {
-        "bba-inline": "var(--bba-z-inline)",
-        "bba-sticky": "var(--bba-z-sticky)",
-        "bba-corner": "var(--bba-z-corner)",
-        "bba-overlay": "var(--bba-z-overlay)",
+        "bb-inline": "var(--bb-z-inline)",
+        "bb-sticky": "var(--bb-z-sticky)",
+        "bb-corner": "var(--bb-z-corner)",
+        "bb-overlay": "var(--bb-z-overlay)",
       },
       backgroundImage: {
-        "bba-brand-gradient": "var(--bba-brand-gradient)",
+        "bb-brand-gradient": "var(--bb-brand-gradient)",
       },
     },
   },

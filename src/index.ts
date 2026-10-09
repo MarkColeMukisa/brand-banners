@@ -1,13 +1,7 @@
 export { VERSION } from "./version";
 
 // Theme
-export {
-  ThemeProvider,
-  injectStyles,
-  useResolvedTheme,
-  useSystemTheme,
-  useTheme,
-} from "./theme";
+export { ThemeProvider, injectStyles, useResolvedTheme, useSystemTheme, useTheme } from "./theme";
 
 // Hooks
 export {
@@ -41,10 +35,12 @@ export {
   AdSlot,
   BannerAd,
   BannerRotator,
+  BrandBanners,
   BrandedBanner,
   MediaBanner,
   type AdSlotProps,
   type BannerAdProps,
+  type BrandBannersProps,
   type BrandedBannerProps,
   type CycleCompleteMeta,
   type MediaBannerProps,

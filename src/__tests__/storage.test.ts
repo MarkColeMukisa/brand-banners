@@ -33,8 +33,8 @@ describe("createExpiringStorage", () => {
   it("stores and retrieves a value before expiry", () => {
     const backing = makeBacking();
     const store = createExpiringStorage({ days: 7, backing })!;
-    store.setItem("bba-dismissed:ad1", "1");
-    expect(store.getItem("bba-dismissed:ad1")).toBe("1");
+    store.setItem("bb-dismissed:ad1", "1");
+    expect(store.getItem("bb-dismissed:ad1")).toBe("1");
   });
 
   it("returns null after the TTL elapses, and cleans up the underlying entry", () => {
@@ -48,9 +48,9 @@ describe("createExpiringStorage", () => {
 
   it("survives legacy plain-string values without crashing", () => {
     const backing = makeBacking();
-    backing.setItem("bba-dismissed:legacy", "1");
+    backing.setItem("bb-dismissed:legacy", "1");
     const store = createExpiringStorage({ days: 7, backing })!;
-    expect(store.getItem("bba-dismissed:legacy")).toBe("1");
+    expect(store.getItem("bb-dismissed:legacy")).toBe("1");
   });
 
   it("namespaces keys when configured", () => {
@@ -82,9 +82,9 @@ describe("createExpiringStorage", () => {
 
   it("falls back to window.localStorage when no backing is supplied", () => {
     const store = createExpiringStorage({ days: 1 })!;
-    store.setItem("bba-test", "1");
-    expect(window.localStorage.getItem("bba-test")).toContain('"value":"1"');
-    window.localStorage.removeItem("bba-test");
+    store.setItem("bb-test", "1");
+    expect(window.localStorage.getItem("bb-test")).toContain('"value":"1"');
+    window.localStorage.removeItem("bb-test");
   });
 });
 

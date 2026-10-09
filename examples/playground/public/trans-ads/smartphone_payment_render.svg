@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<defs><radialGradient id="shadowGrad" cx="0.5" cy="0.5" r="0.5">
+  <stop offset="0%" stop-color="#0f172a" stop-opacity="0.55"/>
+  <stop offset="70%" stop-color="#0f172a" stop-opacity="0.18"/>
+  <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
+</radialGradient>
+<linearGradient id="phone" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#5B21B6"/>
+</linearGradient>
+<linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0%" stop-color="#F5F3FF"/><stop offset="100%" stop-color="#EDE9FE"/>
+</linearGradient>
+<linearGradient id="check" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0%" stop-color="#34D399"/><stop offset="100%" stop-color="#059669"/>
+</linearGradient>
+<linearGradient id="coin" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/>
+</linearGradient>
+</defs>
+<ellipse cx="256" cy="452" rx="170" ry="26" fill="url(#shadowGrad)" opacity="0.28"/>
+<g transform="rotate(-6 256 256)">
+  <rect x="150" y="60" width="212" height="392" rx="40" fill="url(#phone)"/>
+  <rect x="150" y="60" width="212" height="392" rx="40" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="3"/>
+  <rect x="168" y="96" width="176" height="320" rx="24" fill="url(#screen)"/>
+  <rect x="216" y="74" width="80" height="10" rx="5" fill="#4C1D95"/>
+  <circle cx="256" cy="210" r="62" fill="url(#check)"/>
+  <circle cx="256" cy="210" r="62" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="4"/>
+  <path d="M228 212 l20 20 l38 -44" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="196" y="300" width="120" height="14" rx="7" fill="#C4B5FD"/>
+  <rect x="212" y="328" width="88" height="12" rx="6" fill="#DDD6FE"/>
+  <rect x="192" y="362" width="128" height="34" rx="17" fill="#7C3AED"/>
+</g>
+<g transform="rotate(12 396 130)">
+  <circle cx="396" cy="130" r="46" fill="url(#coin)"/>
+  <circle cx="396" cy="130" r="46" fill="none" stroke="#B45309" stroke-width="4"/>
+  <circle cx="396" cy="130" r="32" fill="none" stroke="#FFFBEB" stroke-opacity="0.8" stroke-width="4"/>
+  <text x="396" y="146" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" font-weight="bold" fill="#92400E">$</text>
+</g>
+</svg>

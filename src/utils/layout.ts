@@ -16,7 +16,7 @@ interface LayoutOptions {
 interface LayoutResult {
   /** Inline style overrides (corner positioning, width). */
   style: CSSProperties;
-  /** `data-bba-*` attributes for CSS attribute selectors. */
+  /** `data-bb-*` attributes for CSS attribute selectors. */
   dataAttrs: Record<string, string | undefined>;
 }
 
@@ -26,8 +26,8 @@ const DEFAULT_OFFSET = 20;
 /**
  * Compute layout styles + data attributes from positioning props.
  *
- * The CSS in `css-source.ts` reads `data-bba-position`, `data-bba-sticky`,
- * and `data-bba-corner` to apply the matching position rules (sticky,
+ * The CSS in `css-source.ts` reads `data-bb-position`, `data-bb-sticky`,
+ * and `data-bb-corner` to apply the matching position rules (sticky,
  * fixed, etc.). Corner offsets and `width` are applied inline so consumers
  * can pass any CSS value.
  */
@@ -41,16 +41,16 @@ export function computeLayout({
   const style: CSSProperties = {};
   const dataAttrs: Record<string, string | undefined> = {};
 
-  if (position) dataAttrs["data-bba-position"] = position;
+  if (position) dataAttrs["data-bb-position"] = position;
 
   if (sticky && (position === "top" || position === "bottom")) {
-    dataAttrs["data-bba-sticky"] = "true";
+    dataAttrs["data-bb-sticky"] = "true";
   }
 
   if (position === "corner") {
     const c = corner ?? DEFAULT_CORNER;
     const o = `${offset ?? DEFAULT_OFFSET}px`;
-    dataAttrs["data-bba-corner"] = c;
+    dataAttrs["data-bb-corner"] = c;
     switch (c) {
       case "top-left":
         style.top = o;

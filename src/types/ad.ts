@@ -12,7 +12,8 @@ export type SizePreset =
   | "social"
   | "halfpage"
   | "banner"
-  | "fullwidth-strip";
+  | "fullwidth-strip"
+  | "card";
 
 /** Optional brand-color palette for `BrandedBanner`. */
 export interface BrandColors {

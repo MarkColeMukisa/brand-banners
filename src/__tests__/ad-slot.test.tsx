@@ -63,18 +63,15 @@ describe("AdSlot", () => {
         <BannerAd id="x" title="Single" cta={{ label: "Go", href: "/x" }} />
       </AdSlot>,
     );
-    const slot = document.querySelector(".bba-ad-slot");
-    expect(slot).toHaveAttribute("data-bba-position", "bottom");
-    expect(slot).toHaveAttribute("data-bba-sticky", "true");
+    const slot = document.querySelector(".bb-ad-slot");
+    expect(slot).toHaveAttribute("data-bb-position", "bottom");
+    expect(slot).toHaveAttribute("data-bb-sticky", "true");
     expect(screen.getByText("Single")).toBeInTheDocument();
   });
 
-  it("sets data-bba-rotating='true' when rotate is configured", () => {
+  it("sets data-bb-rotating='true' when rotate is configured", () => {
     render(<AdSlot ads={ads} rotate={{ interval: 1000 }} />);
-    expect(document.querySelector(".bba-ad-slot")).toHaveAttribute(
-      "data-bba-rotating",
-      "true",
-    );
+    expect(document.querySelector(".bb-ad-slot")).toHaveAttribute("data-bb-rotating", "true");
   });
 
   it("supports the BannerRotator alias", async () => {
@@ -115,7 +112,7 @@ describe("AdSlot", () => {
     };
     render(<AdSlot ads={ads} dismissible storage={storage} />);
     fireEvent.click(screen.getByRole("button", { name: "Dismiss ad" }));
-    expect(store.get("bba-dismissed:1")).toBe("1");
+    expect(store.get("bb-dismissed:1")).toBe("1");
   });
 
   it("storageKey acts as a per-slot namespace prefix on the resolved key", () => {
@@ -129,12 +126,10 @@ describe("AdSlot", () => {
         store.delete(k);
       },
     };
-    render(
-      <AdSlot ads={ads} dismissible storage={storage} storageKey="footer-slot" />,
-    );
+    render(<AdSlot ads={ads} dismissible storage={storage} storageKey="footer-slot" />);
     fireEvent.click(screen.getByRole("button", { name: "Dismiss ad" }));
-    expect(store.get("footer-slot:bba-dismissed:1")).toBe("1");
-    expect(store.get("bba-dismissed:1")).toBeUndefined();
+    expect(store.get("footer-slot:bb-dismissed:1")).toBe("1");
+    expect(store.get("bb-dismissed:1")).toBeUndefined();
   });
 
   it("children-as-function still receives the slot-merged dismissible default", () => {
@@ -154,13 +149,7 @@ describe("AdSlot", () => {
   it("width / layout / size / theme cascade into children-as-function config", () => {
     let seen: Partial<BannerConfig> = {};
     render(
-      <AdSlot
-        ads={ads}
-        width="460px"
-        layout="image-right"
-        size="leaderboard"
-        theme="dark"
-      >
+      <AdSlot ads={ads} width="460px" layout="image-right" size="leaderboard" theme="dark">
         {(config) => {
           seen = config;
           return <div>{config.title}</div>;
@@ -175,18 +164,18 @@ describe("AdSlot", () => {
 
   it("per-ad config wins over the slot-level cascade for width / layout / size / theme", () => {
     const overridden = [
-      { ...ads[0]!, width: "300px", layout: "image-left" as const, size: "md" as const, theme: "light" as const },
+      {
+        ...ads[0]!,
+        width: "300px",
+        layout: "image-left" as const,
+        size: "md" as const,
+        theme: "light" as const,
+      },
       ads[1]!,
     ];
     let seen: Partial<BannerConfig> = {};
     render(
-      <AdSlot
-        ads={overridden}
-        width="460px"
-        layout="image-right"
-        size="leaderboard"
-        theme="dark"
-      >
+      <AdSlot ads={overridden} width="460px" layout="image-right" size="leaderboard" theme="dark">
         {(config) => {
           seen = config;
           return <div>{config.title}</div>;
@@ -201,13 +190,7 @@ describe("AdSlot", () => {
 
   it("onCycleComplete fires once per full pass through ads", () => {
     const onCycleComplete = vi.fn();
-    render(
-      <AdSlot
-        ads={ads}
-        rotate={{ interval: 1000 }}
-        onCycleComplete={onCycleComplete}
-      />,
-    );
+    render(<AdSlot ads={ads} rotate={{ interval: 1000 }} onCycleComplete={onCycleComplete} />);
     // Cycle through all 3 ads — wraps from 2 → 0 on the 3rd tick.
     act(() => {
       vi.advanceTimersByTime(1000); // 0 → 1
@@ -251,25 +234,23 @@ describe("AdSlot", () => {
         corner={["bottom-right", "bottom-left"]}
       />,
     );
-    const slot = document.querySelector(".bba-ad-slot")!;
-    expect(slot.getAttribute("data-bba-corner")).toBe("bottom-right");
+    const slot = document.querySelector(".bb-ad-slot")!;
+    expect(slot.getAttribute("data-bb-corner")).toBe("bottom-right");
     // Complete one full cycle (3 ticks for 3 ads).
     act(() => {
       vi.advanceTimersByTime(3000);
     });
-    expect(slot.getAttribute("data-bba-corner")).toBe("bottom-left");
+    expect(slot.getAttribute("data-bb-corner")).toBe("bottom-left");
     // Complete a second full cycle — wraps back to the first corner.
     act(() => {
       vi.advanceTimersByTime(3000);
     });
-    expect(slot.getAttribute("data-bba-corner")).toBe("bottom-right");
+    expect(slot.getAttribute("data-bb-corner")).toBe("bottom-right");
   });
 
   it("single-string corner still works (back-compat)", () => {
     render(<AdSlot ads={ads} position="corner" corner="top-left" />);
-    expect(document.querySelector(".bba-ad-slot")!.getAttribute("data-bba-corner")).toBe(
-      "top-left",
-    );
+    expect(document.querySelector(".bb-ad-slot")!.getAttribute("data-bb-corner")).toBe("top-left");
   });
 
   it("storage cascades into BrandedBanner rendered via children-as-function (no re-stating)", () => {
@@ -289,7 +270,7 @@ describe("AdSlot", () => {
       </AdSlot>,
     );
     fireEvent.click(screen.getByRole("button", { name: "Dismiss ad" }));
-    expect(store.get("bba-dismissed:1")).toBe("1");
+    expect(store.get("bb-dismissed:1")).toBe("1");
   });
 
   it("storageKey prefix flows into the resolved key for children-as-function banners", () => {
@@ -309,8 +290,8 @@ describe("AdSlot", () => {
       </AdSlot>,
     );
     fireEvent.click(screen.getByRole("button", { name: "Dismiss ad" }));
-    expect(store.get("footer-slot:bba-dismissed:1")).toBe("1");
-    expect(store.get("bba-dismissed:1")).toBeUndefined();
+    expect(store.get("footer-slot:bb-dismissed:1")).toBe("1");
+    expect(store.get("bb-dismissed:1")).toBeUndefined();
   });
 
   it("explicit storage on the inner banner wins over the slot context", () => {
@@ -340,7 +321,7 @@ describe("AdSlot", () => {
       </AdSlot>,
     );
     fireEvent.click(screen.getByRole("button", { name: "Dismiss ad" }));
-    expect(localStore.get("bba-dismissed:1")).toBe("1");
+    expect(localStore.get("bb-dismissed:1")).toBe("1");
     expect(slotStore.size).toBe(0);
   });
 });

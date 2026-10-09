@@ -25,10 +25,7 @@ export interface BannerAdProps extends Omit<CustomBannerProps, "children" | "com
   bg?: "surface" | "brand" | "gradient" | (string & {});
 }
 
-function BannerAdInner(
-  props: BannerAdProps,
-  forwardedRef: ForwardedRef<HTMLDivElement>,
-) {
+function BannerAdInner(props: BannerAdProps, forwardedRef: ForwardedRef<HTMLDivElement>) {
   const {
     title,
     subtitle,
@@ -55,14 +52,10 @@ function BannerAdInner(
 
   const isStrong = mergedBg === "brand" || mergedBg === "gradient";
 
-  const inlineBg =
-    mergedBg && mergedBg !== "surface" && !isStrong
-      ? { background: mergedBg }
-      : {};
+  const inlineBg = mergedBg && mergedBg !== "surface" && !isStrong ? { background: mergedBg } : {};
 
   const subtitleText = mergedSubtitle ?? mergedText;
-  const hasBody =
-    !!(mergedEyebrow || mergedTitle || subtitleText || mergedFinePrint);
+  const hasBody = !!(mergedEyebrow || mergedTitle || subtitleText || mergedFinePrint);
 
   return (
     <CustomBanner
@@ -70,7 +63,7 @@ function BannerAdInner(
       componentType="BannerAd"
       size={mergedSize}
       config={config}
-      className={cn("bba-banner-ad", isStrong && "bba-banner-ad--strong", className)}
+      className={cn("bb-banner-ad", isStrong && "bb-banner-ad--strong", className)}
       style={{ ...inlineBg, ...style }}
       {...customProps}
     >
@@ -79,9 +72,7 @@ function BannerAdInner(
           {mergedEyebrow && <CustomBanner.Eyebrow>{mergedEyebrow}</CustomBanner.Eyebrow>}
           {mergedTitle && <CustomBanner.Title>{mergedTitle}</CustomBanner.Title>}
           {subtitleText && <CustomBanner.Subtitle>{subtitleText}</CustomBanner.Subtitle>}
-          {mergedFinePrint && (
-            <CustomBanner.FinePrint>{mergedFinePrint}</CustomBanner.FinePrint>
-          )}
+          {mergedFinePrint && <CustomBanner.FinePrint>{mergedFinePrint}</CustomBanner.FinePrint>}
         </CustomBanner.Body>
       )}
       {mergedCta && <CustomBanner.CTA {...mergedCta} />}

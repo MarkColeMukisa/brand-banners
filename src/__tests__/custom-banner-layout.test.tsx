@@ -10,8 +10,8 @@ describe("CustomBanner layout props", () => {
       </CustomBanner>,
     );
     const b = screen.getByRole("complementary");
-    expect(b).toHaveAttribute("data-bba-position", "top");
-    expect(b).toHaveAttribute("data-bba-sticky", "true");
+    expect(b).toHaveAttribute("data-bb-position", "top");
+    expect(b).toHaveAttribute("data-bb-sticky", "true");
   });
 
   it("position='corner' applies corner offsets inline", () => {
@@ -21,8 +21,8 @@ describe("CustomBanner layout props", () => {
       </CustomBanner>,
     );
     const b = screen.getByRole("complementary");
-    expect(b).toHaveAttribute("data-bba-position", "corner");
-    expect(b).toHaveAttribute("data-bba-corner", "top-left");
+    expect(b).toHaveAttribute("data-bb-position", "corner");
+    expect(b).toHaveAttribute("data-bb-corner", "top-left");
     expect(b).toHaveStyle({ top: "30px", left: "30px" });
   });
 
@@ -51,37 +51,31 @@ describe("CustomBanner layout props", () => {
     expect(screen.getByRole("complementary")).toHaveStyle({ width: "80%" });
   });
 
-  it("size preset sets data-bba-size", () => {
+  it("size preset sets data-bb-size", () => {
     render(
       <CustomBanner id="e" size="leaderboard">
         <CustomBanner.Title>t</CustomBanner.Title>
       </CustomBanner>,
     );
-    expect(screen.getByRole("complementary")).toHaveAttribute(
-      "data-bba-size",
-      "leaderboard",
-    );
+    expect(screen.getByRole("complementary")).toHaveAttribute("data-bb-size", "leaderboard");
   });
 
-  it("align prop sets data-bba-align", () => {
+  it("align prop sets data-bb-align", () => {
     render(
       <CustomBanner id="f" align="center">
         <CustomBanner.Title>t</CustomBanner.Title>
       </CustomBanner>,
     );
-    expect(screen.getByRole("complementary")).toHaveAttribute("data-bba-align", "center");
+    expect(screen.getByRole("complementary")).toHaveAttribute("data-bb-align", "center");
   });
 
-  it("mediaPosition prop sets data-bba-media-pos", () => {
+  it("mediaPosition prop sets data-bb-media-pos", () => {
     render(
       <CustomBanner id="g" mediaPosition="background">
         <CustomBanner.Title>t</CustomBanner.Title>
       </CustomBanner>,
     );
-    expect(screen.getByRole("complementary")).toHaveAttribute(
-      "data-bba-media-pos",
-      "background",
-    );
+    expect(screen.getByRole("complementary")).toHaveAttribute("data-bb-media-pos", "background");
   });
 
   it("inline `style` prop wins over computed layout style", () => {
@@ -96,17 +90,13 @@ describe("CustomBanner layout props", () => {
 
   it("config object positioning is applied; explicit prop wins", () => {
     render(
-      <CustomBanner
-        id="i"
-        config={{ position: "top", sticky: true, size: "md" }}
-        size="lg"
-      >
+      <CustomBanner id="i" config={{ position: "top", sticky: true, size: "md" }} size="lg">
         <CustomBanner.Title>t</CustomBanner.Title>
       </CustomBanner>,
     );
     const b = screen.getByRole("complementary");
-    expect(b).toHaveAttribute("data-bba-position", "top");
-    expect(b).toHaveAttribute("data-bba-sticky", "true");
-    expect(b).toHaveAttribute("data-bba-size", "lg");
+    expect(b).toHaveAttribute("data-bb-position", "top");
+    expect(b).toHaveAttribute("data-bb-sticky", "true");
+    expect(b).toHaveAttribute("data-bb-size", "lg");
   });
 });

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<defs><radialGradient id="shadowGrad" cx="0.5" cy="0.5" r="0.5">
+  <stop offset="0%" stop-color="#0f172a" stop-opacity="0.55"/>
+  <stop offset="70%" stop-color="#0f172a" stop-opacity="0.18"/>
+  <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
+</radialGradient>
+<linearGradient id="env" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0%" stop-color="#38BDF8"/><stop offset="100%" stop-color="#0369A1"/>
+</linearGradient>
+<linearGradient id="flap" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0%" stop-color="#7DD3FC"/><stop offset="100%" stop-color="#38BDF8"/>
+</linearGradient>
+<linearGradient id="bubble" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0%" stop-color="#34D399"/><stop offset="100%" stop-color="#059669"/>
+</linearGradient>
+<linearGradient id="plane" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#BAE6FD"/>
+</linearGradient>
+</defs>
+<ellipse cx="256" cy="448" rx="185" ry="26" fill="url(#shadowGrad)" opacity="0.28"/>
+<g transform="rotate(-4 256 280)">
+  <rect x="96" y="180" width="320" height="230" rx="32" fill="url(#env)"/>
+  <path d="M104 200 L256 320 L408 200" fill="none" stroke="#0C4A6E" stroke-opacity="0.35" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M96 212 Q96 180 128 180 L384 180 Q416 180 416 212 L266 322 Q256 330 246 322 Z" fill="url(#flap)"/>
+  <path d="M96 212 Q96 180 128 180 L384 180 Q416 180 416 212 L266 322 Q256 330 246 322 Z" fill="none" stroke="#ffffff" stroke-opacity="0.4" stroke-width="3"/>
+  <circle cx="256" cy="238" r="34" fill="#0EA5E9"/>
+  <circle cx="256" cy="238" r="34" fill="none" stroke="#ffffff" stroke-opacity="0.6" stroke-width="3"/>
+  <text x="256" y="252" text-anchor="middle" font-family="Arial, sans-serif" font-size="40" font-weight="bold" fill="#ffffff">@</text>
+</g>
+<g transform="rotate(8 128 122)">
+  <rect x="76" y="76" width="104" height="76" rx="24" fill="url(#bubble)"/>
+  <path d="M104 148 l-8 26 l30 -20 Z" fill="#059669"/>
+  <circle cx="106" cy="114" r="7" fill="#ECFDF5"/>
+  <circle cx="128" cy="114" r="7" fill="#ECFDF5"/>
+  <circle cx="150" cy="114" r="7" fill="#ECFDF5"/>
+</g>
+<g transform="rotate(14 400 108)">
+  <path d="M340 128 L452 78 L414 172 L392 132 Z" fill="url(#plane)" stroke="#7DD3FC" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M392 132 L452 78 L400 148 Z" fill="#93C5FD" opacity="0.8"/>
+</g>
+</svg>

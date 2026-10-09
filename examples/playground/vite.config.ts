@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "beautiful-banner-ads": resolve(__dirname, "../../src"),
+      "brand-banners": resolve(__dirname, "../../src"),
     },
   },
   server: { port: 5173, open: true },

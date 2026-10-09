@@ -8,7 +8,7 @@ import {
   ThemeProvider,
   type BannerConfig,
   type ThemeMode,
-} from "beautiful-banner-ads";
+} from "brand-banners";
 
 const rotatingAds: BannerConfig[] = [
   {
@@ -39,7 +39,7 @@ export function App() {
     <ThemeProvider mode={theme}>
       <header className="app-header">
         <div>
-          <h1>beautiful-banner-ads</h1>
+          <h1>brand-banners</h1>
           <p>Live playground · {theme}</p>
         </div>
         <div className="theme-toggle">

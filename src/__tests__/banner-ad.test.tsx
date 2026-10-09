@@ -4,20 +4,18 @@ import { BannerAd } from "../components/BannerAd";
 
 describe("BannerAd", () => {
   it("renders a polished strip from title + cta with zero styling props", () => {
-    render(
-      <BannerAd id="promo" title="Save 20%" cta={{ label: "Get it", href: "/course" }} />,
-    );
+    render(<BannerAd id="promo" title="Save 20%" cta={{ label: "Get it", href: "/course" }} />);
     const banner = screen.getByRole("complementary");
     expect(banner).toHaveAttribute("aria-label", "Advertisement");
-    expect(banner).toHaveAttribute("data-bba-id", "promo");
-    expect(banner).toHaveClass("bba-banner-ad");
-    expect(screen.getByText("Save 20%")).toHaveClass("bba-banner__title");
+    expect(banner).toHaveAttribute("data-bb-id", "promo");
+    expect(banner).toHaveClass("bb-banner-ad");
+    expect(screen.getByText("Save 20%")).toHaveClass("bb-banner__title");
     expect(screen.getByRole("link", { name: "Get it" })).toHaveAttribute("href", "/course");
   });
 
   it("text prop is treated as an alias for subtitle", () => {
     render(<BannerAd id="a" title="t" text="legacy text alias" />);
-    expect(screen.getByText("legacy text alias")).toHaveClass("bba-banner__subtitle");
+    expect(screen.getByText("legacy text alias")).toHaveClass("bb-banner__subtitle");
   });
 
   it("subtitle wins when both text and subtitle are provided", () => {
@@ -28,22 +26,22 @@ describe("BannerAd", () => {
 
   it("renders an eyebrow label above the title", () => {
     render(<BannerAd id="b" eyebrow="NEW" title="hi" />);
-    expect(screen.getByText("NEW")).toHaveClass("bba-banner__eyebrow");
+    expect(screen.getByText("NEW")).toHaveClass("bb-banner__eyebrow");
   });
 
   it("renders fine print under the body", () => {
     render(<BannerAd id="c" title="t" finePrint="Free delivery incl.*" />);
-    expect(screen.getByText("Free delivery incl.*")).toHaveClass("bba-banner__fine-print");
+    expect(screen.getByText("Free delivery incl.*")).toHaveClass("bb-banner__fine-print");
   });
 
   it("bg='brand' applies the strong gradient variant class", () => {
     render(<BannerAd id="d" title="t" bg="brand" />);
-    expect(screen.getByRole("complementary")).toHaveClass("bba-banner-ad--strong");
+    expect(screen.getByRole("complementary")).toHaveClass("bb-banner-ad--strong");
   });
 
   it("bg='gradient' is an alias for the strong variant", () => {
     render(<BannerAd id="d2" title="t" bg="gradient" />);
-    expect(screen.getByRole("complementary")).toHaveClass("bba-banner-ad--strong");
+    expect(screen.getByRole("complementary")).toHaveClass("bb-banner-ad--strong");
   });
 
   it("custom bg color string passes through as inline background", () => {
@@ -53,16 +51,14 @@ describe("BannerAd", () => {
 
   it("defaults to size='md' but allows override", () => {
     const { rerender } = render(<BannerAd id="f" title="t" />);
-    expect(screen.getByRole("complementary")).toHaveAttribute("data-bba-size", "md");
+    expect(screen.getByRole("complementary")).toHaveAttribute("data-bb-size", "md");
     rerender(<BannerAd id="f" title="t" size="lg" />);
-    expect(screen.getByRole("complementary")).toHaveAttribute("data-bba-size", "lg");
+    expect(screen.getByRole("complementary")).toHaveAttribute("data-bb-size", "lg");
   });
 
   it("dismissible renders the close button which removes the banner", () => {
     const onClose = vi.fn();
-    render(
-      <BannerAd id="g" title="dismiss me" dismissible onClose={onClose} />,
-    );
+    render(<BannerAd id="g" title="dismiss me" dismissible onClose={onClose} />);
     fireEvent.click(screen.getByRole("button", { name: "Dismiss ad" }));
     expect(onClose).toHaveBeenCalledWith(expect.objectContaining({ id: "g", type: "BannerAd" }));
     expect(screen.queryByRole("complementary")).toBeNull();
@@ -86,11 +82,7 @@ describe("BannerAd", () => {
 
   it("explicit props override config", () => {
     render(
-      <BannerAd
-        id="i"
-        title="From prop"
-        config={{ title: "From config", subtitle: "kept" }}
-      />,
+      <BannerAd id="i" title="From prop" config={{ title: "From config", subtitle: "kept" }} />,
     );
     expect(screen.getByText("From prop")).toBeInTheDocument();
     expect(screen.getByText("kept")).toBeInTheDocument();

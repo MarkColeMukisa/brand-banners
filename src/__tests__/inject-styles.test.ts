@@ -7,26 +7,26 @@ describe("injectStyles", () => {
   });
 
   it("injects a <style> tag containing the package CSS", () => {
-    expect(document.getElementById("bba-injected-styles")).toBeNull();
+    expect(document.getElementById("bb-injected-styles")).toBeNull();
     injectStyles();
-    const tag = document.getElementById("bba-injected-styles");
+    const tag = document.getElementById("bb-injected-styles");
     expect(tag).not.toBeNull();
     expect(tag?.tagName).toBe("STYLE");
-    expect(tag?.textContent).toContain("--bba-brand-900");
-    expect(tag?.textContent).toContain(".bba-root");
+    expect(tag?.textContent).toContain("--bb-brand-900");
+    expect(tag?.textContent).toContain(".bb-root");
   });
 
   it("tags the injected element with the package version for debugging", () => {
     injectStyles();
-    const tag = document.getElementById("bba-injected-styles");
-    expect(tag?.getAttribute("data-bba-version")).toBe("0.1.0");
+    const tag = document.getElementById("bb-injected-styles");
+    expect(tag?.getAttribute("data-bb-version")).toBe("0.1.0");
   });
 
   it("is idempotent — repeated calls produce a single tag", () => {
     injectStyles();
     injectStyles();
     injectStyles();
-    expect(document.querySelectorAll("#bba-injected-styles")).toHaveLength(1);
+    expect(document.querySelectorAll("#bb-injected-styles")).toHaveLength(1);
   });
 
   it("inserts the style tag at the start of <head> so consumer styles cascade after", () => {
@@ -35,7 +35,7 @@ describe("injectStyles", () => {
     document.head.appendChild(userStyle);
 
     injectStyles();
-    expect((document.head.firstChild as HTMLElement | null)?.id).toBe("bba-injected-styles");
+    expect((document.head.firstChild as HTMLElement | null)?.id).toBe("bb-injected-styles");
 
     userStyle.remove();
   });

@@ -1,9 +1,12 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { VERSION } from "../index";
 
-describe("beautiful-banner-ads (sanity)", () => {
+const pkg = JSON.parse(readFileSync("package.json", "utf8")) as { version: string };
+
+describe("brand-banners (sanity)", () => {
   it("exposes a VERSION constant matching package.json semver", () => {
-    expect(VERSION).toBe("0.1.0");
+    expect(VERSION).toBe(pkg.version);
     expect(VERSION).toMatch(/^\d+\.\d+\.\d+$/);
   });
 });

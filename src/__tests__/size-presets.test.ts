@@ -13,6 +13,7 @@ describe("SIZE_PRESETS", () => {
         "halfpage",
         "banner",
         "fullwidth-strip",
+        "card",
       ].sort(),
     );
   });
@@ -34,6 +35,10 @@ describe("SIZE_PRESETS", () => {
     expect(SIZE_PRESETS["sm"]).toEqual({ minHeight: "56px" });
     expect(SIZE_PRESETS["md"]).toEqual({ minHeight: "72px" });
     expect(SIZE_PRESETS["lg"]).toEqual({ minHeight: "96px" });
+  });
+
+  it("card is width-only, so its height follows the content", () => {
+    expect(SIZE_PRESETS["card"]).toEqual({ width: "520px" });
   });
 
   it("getSizeMeta returns undefined for undefined input", () => {

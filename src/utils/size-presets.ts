@@ -10,6 +10,7 @@ import type { SizePreset } from "../types/ad";
  *  - `halfpage`: IAB 300×600 (skyscraper / half-page)
  *  - `banner`: IAB 468×60 (classic banner)
  *  - `fullwidth-strip`: 100% × 72px (sticky promo bar)
+ *  - `card`: 520px wide, content height (corner slots, sidebars)
  *  - `sm | md | lg`: content-driven min-heights
  */
 export interface SizeMeta {
@@ -34,6 +35,7 @@ export const SIZE_PRESETS: Readonly<Record<SizePreset, SizeMeta>> = {
     minHeight: "72px",
     borderRadius: "0",
   },
+  card: { width: "520px" },
 } as const;
 
 export function getSizeMeta(preset: SizePreset | undefined): SizeMeta | undefined {

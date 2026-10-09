@@ -1,9 +1,9 @@
 {
-  "name": "beautiful-banner-ads-playground",
+  "name": "brand-banners-playground",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "description": "Live demo of beautiful-banner-ads in light/dark/system themes.",
+  "description": "Live demo of brand-banners in light/dark/system themes.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

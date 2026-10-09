@@ -1,8 +1,8 @@
 import { cssSource } from "./css-source";
 import { VERSION } from "../version";
 
-const STYLE_TAG_ID = "bba-injected-styles";
-const STYLE_TAG_VERSION_ATTR = "data-bba-version";
+const STYLE_TAG_ID = "bb-injected-styles";
+const STYLE_TAG_VERSION_ATTR = "data-bb-version";
 
 let injected = false;
 
@@ -11,8 +11,8 @@ let injected = false;
  * SSR-safe: a no-op when `document` is not defined.
  *
  * Inserted at the start of `<head>` so consumer styles cascade after and win
- * any specificity-tied rules (combined with our `:where()` use, this means
- * Tailwind utility classes always override package defaults).
+ * any specificity-tied rules. See the note at the top of the component
+ * styles in `css-source.ts` for how much each rule weighs.
  */
 export function injectStyles(): void {
   if (typeof document === "undefined") return;

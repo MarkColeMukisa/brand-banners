@@ -13,9 +13,9 @@ describe("BrandedBanner", () => {
       />,
     );
     const banner = screen.getByRole("complementary");
-    expect(banner).toHaveClass("bba-banner-branded");
-    expect(banner).toHaveAttribute("data-bba-size", "leaderboard");
-    const img = document.querySelector<HTMLImageElement>(".bba-banner-branded__image");
+    expect(banner).toHaveClass("bb-banner-branded");
+    expect(banner).toHaveAttribute("data-bb-size", "leaderboard");
+    const img = document.querySelector<HTMLImageElement>(".bb-banner-branded__image");
     expect(img).not.toBeNull();
     expect(img?.getAttribute("src")).toBe("https://example.com/ink.png");
     expect(screen.getByRole("link", { name: "Shop" })).toHaveAttribute("href", "/ink");
@@ -23,32 +23,21 @@ describe("BrandedBanner", () => {
 
   it("default layout is image-right (maps to mediaPosition=right)", () => {
     render(<BrandedBanner id="b2" title="t" />);
-    expect(screen.getByRole("complementary")).toHaveAttribute(
-      "data-bba-media-pos",
-      "right",
-    );
+    expect(screen.getByRole("complementary")).toHaveAttribute("data-bb-media-pos", "right");
   });
 
   it("layout=image-left maps to mediaPosition=left", () => {
     render(<BrandedBanner id="b3" title="t" layout="image-left" />);
-    expect(screen.getByRole("complementary")).toHaveAttribute(
-      "data-bba-media-pos",
-      "left",
-    );
+    expect(screen.getByRole("complementary")).toHaveAttribute("data-bb-media-pos", "left");
   });
 
   it("layout=image-bg maps to mediaPosition=background", () => {
     render(<BrandedBanner id="b4" title="t" layout="image-bg" />);
-    expect(screen.getByRole("complementary")).toHaveAttribute(
-      "data-bba-media-pos",
-      "background",
-    );
+    expect(screen.getByRole("complementary")).toHaveAttribute("data-bb-media-pos", "background");
   });
 
   it("accepts image as { src, alt } object", () => {
-    render(
-      <BrandedBanner id="b5" title="t" image={{ src: "/x.png", alt: "Product" }} />,
-    );
+    render(<BrandedBanner id="b5" title="t" image={{ src: "/x.png", alt: "Product" }} />);
     expect(screen.getByRole("img", { name: "Product" })).toHaveAttribute("src", "/x.png");
   });
 
@@ -62,16 +51,14 @@ describe("BrandedBanner", () => {
     );
     const banner = screen.getByRole("complementary");
     const style = banner.getAttribute("style") ?? "";
-    expect(style).toMatch(/--bba-brand-800:\s*#FF0000/);
-    expect(style).toMatch(/--bba-accent-500:\s*#00FF00/);
-    expect(style).toMatch(/--bba-on-brand:\s*#FFFFFF/);
+    expect(style).toMatch(/--bb-brand-800:\s*#FF0000/);
+    expect(style).toMatch(/--bb-accent-500:\s*#00FF00/);
+    expect(style).toMatch(/--bb-on-brand:\s*#FFFFFF/);
   });
 
   it("componentType in adMeta is 'BrandedBanner'", () => {
     const calls: unknown[] = [];
-    render(
-      <BrandedBanner id="b7" title="t" onView={(m) => calls.push(m)} />,
-    );
+    render(<BrandedBanner id="b7" title="t" onView={(m) => calls.push(m)} />);
     expect(calls[0]).toMatchObject({ id: "b7", type: "BrandedBanner" });
   });
 

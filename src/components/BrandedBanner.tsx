@@ -5,8 +5,10 @@ import { cn } from "../utils/cn";
 
 export type { ImageInput } from "../types/ad";
 
-export interface BrandedBannerProps
-  extends Omit<CustomBannerProps, "children" | "componentType" | "mediaPosition"> {
+export interface BrandedBannerProps extends Omit<
+  CustomBannerProps,
+  "children" | "componentType" | "mediaPosition"
+> {
   title?: string;
   subtitle?: string;
   eyebrow?: string;
@@ -56,33 +58,30 @@ function deriveBrandVars(b: BrandColors | undefined): CSSProperties | undefined 
   if (!b) return undefined;
   const out: Record<string, string> = {};
   if (b.bg) {
-    out["--bba-brand-800"] = b.bg;
-    out["--bba-brand-900"] = b.bg;
+    out["--bb-brand-800"] = b.bg;
+    out["--bb-brand-900"] = b.bg;
   }
   if (b.primary) {
-    out["--bba-brand-700"] = b.primary;
+    out["--bb-brand-700"] = b.primary;
     if (!b.bg) {
-      out["--bba-brand-900"] = b.primary;
-      out["--bba-brand-800"] = b.primary;
+      out["--bb-brand-900"] = b.primary;
+      out["--bb-brand-800"] = b.primary;
     }
   }
   if (b.accent) {
-    out["--bba-accent-500"] = b.accent;
-    out["--bba-accent-600"] = b.accent;
+    out["--bb-accent-500"] = b.accent;
+    out["--bb-accent-600"] = b.accent;
   }
   if (b.text) {
-    out["--bba-on-brand"] = b.text;
+    out["--bb-on-brand"] = b.text;
   }
-  const a = b.bg ?? b.primary ?? "var(--bba-brand-900)";
-  const c = b.primary ?? "var(--bba-brand-700)";
-  out["--bba-brand-gradient"] = `linear-gradient(105deg, ${a} 0%, ${a} 45%, ${c} 100%)`;
+  const a = b.bg ?? b.primary ?? "var(--bb-brand-900)";
+  const c = b.primary ?? "var(--bb-brand-700)";
+  out["--bb-brand-gradient"] = `linear-gradient(105deg, ${a} 0%, ${a} 45%, ${c} 100%)`;
   return out as CSSProperties;
 }
 
-function BrandedBannerInner(
-  props: BrandedBannerProps,
-  forwardedRef: ForwardedRef<HTMLDivElement>,
-) {
+function BrandedBannerInner(props: BrandedBannerProps, forwardedRef: ForwardedRef<HTMLDivElement>) {
   const {
     title,
     subtitle,
@@ -121,11 +120,11 @@ function BrandedBannerInner(
       ref={forwardedRef}
       componentType="BrandedBanner"
       config={config}
-      className={cn("bba-banner-branded", className)}
+      className={cn("bb-banner-branded", className)}
       style={{
         ...brandVars,
-        background: "var(--bba-brand-gradient)",
-        color: "var(--bba-on-brand)",
+        background: "var(--bb-brand-gradient)",
+        color: "var(--bb-on-brand)",
         ...style,
       }}
       mediaPosition={LAYOUT_TO_MEDIA_POS[mergedLayout]}
@@ -139,7 +138,7 @@ function BrandedBannerInner(
             alt={mergedImage.alt}
             width={mergedImage.width}
             height={mergedImage.height}
-            className="bba-banner-branded__image"
+            className="bb-banner-branded__image"
             loading="lazy"
             style={
               mergedImage.fit || mergedImage.position

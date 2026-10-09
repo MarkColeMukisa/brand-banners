@@ -1,5 +1,6 @@
 import {
   forwardRef,
+  useCallback,
   useId,
   useMemo,
   useRef,
@@ -38,7 +39,7 @@ export interface CustomBannerProps {
   dismissible?: boolean;
   /** Storage adapter for remembering dismissal across reloads. */
   storage?: StorageAdapter;
-  /** Override the dismiss storage key. Defaults to `bba-dismissed:${id}`. */
+  /** Override the dismiss storage key. Defaults to `bb-dismissed:${id}`. */
   storageKey?: string;
   /** Accessible label for the banner. Default `"Advertisement"`. */
   ariaLabel?: string;
@@ -80,10 +81,7 @@ export interface CustomBannerProps {
   componentType?: string;
 }
 
-function CustomBannerInner(
-  props: CustomBannerProps,
-  forwardedRef: ForwardedRef<HTMLDivElement>,
-) {
+function CustomBannerInner(props: CustomBannerProps, forwardedRef: ForwardedRef<HTMLDivElement>) {
   const {
     config,
     id: idProp,
@@ -153,11 +151,22 @@ function CustomBannerInner(
     onEnter: () => onView?.(adMeta),
   });
 
+  // Inside an <AdSlot>, the slot also hears about the dismissal so it can
+  // skip this ad or hide itself.
+  const slotOnDismiss = slotCtx?.onDismiss;
+  const handleClose = useCallback(
+    (meta: AdMeta) => {
+      onClose?.(meta);
+      slotOnDismiss?.(meta);
+    },
+    [onClose, slotOnDismiss],
+  );
+
   const { dismissed, dismiss } = useDismiss({
     adMeta,
     storage: effectiveStorage,
     storageKey: effectiveStorageKey,
-    onClose,
+    onClose: handleClose,
     enabled: dismissible,
   });
 
@@ -180,12 +189,12 @@ function CustomBannerInner(
     <BannerContext.Provider value={ctxValue}>
       <div
         ref={composedRef}
-        className={cn("bba-root", "bba-banner", className)}
-        data-bba-theme={themeMode}
-        data-bba-id={id}
-        data-bba-size={merged.size}
-        data-bba-align={align}
-        data-bba-media-pos={mediaPosition}
+        className={cn("bb-root", "bb-banner", className)}
+        data-bb-theme={themeMode}
+        data-bb-id={id}
+        data-bb-size={merged.size}
+        data-bb-align={align}
+        data-bb-media-pos={mediaPosition}
         role="complementary"
         aria-label={ariaLabel}
         style={{ ...layout.style, ...style }}
@@ -210,7 +219,7 @@ interface SlotProps {
 
 export function BannerMedia({ children, className, style }: SlotProps) {
   return (
-    <div className={cn("bba-banner__media", className)} style={style}>
+    <div className={cn("bb-banner__media", className)} style={style}>
       {children}
     </div>
   );
@@ -219,7 +228,7 @@ BannerMedia.displayName = "CustomBanner.Media";
 
 export function BannerBody({ children, className, style }: SlotProps) {
   return (
-    <div className={cn("bba-banner__body", className)} style={style}>
+    <div className={cn("bb-banner__body", className)} style={style}>
       {children}
     </div>
   );
@@ -227,7 +236,7 @@ export function BannerBody({ children, className, style }: SlotProps) {
 BannerBody.displayName = "CustomBanner.Body";
 
 export function BannerEyebrow({ children, className }: SlotProps) {
-  return <span className={cn("bba-banner__eyebrow", className)}>{children}</span>;
+  return <span className={cn("bb-banner__eyebrow", className)}>{children}</span>;
 }
 BannerEyebrow.displayName = "CustomBanner.Eyebrow";
 
@@ -237,17 +246,17 @@ interface BannerTitleProps extends SlotProps {
 }
 
 export function BannerTitle({ children, className, as: Tag = "h2" }: BannerTitleProps) {
-  return <Tag className={cn("bba-banner__title", className)}>{children}</Tag>;
+  return <Tag className={cn("bb-banner__title", className)}>{children}</Tag>;
 }
 BannerTitle.displayName = "CustomBanner.Title";
 
 export function BannerSubtitle({ children, className }: SlotProps) {
-  return <p className={cn("bba-banner__subtitle", className)}>{children}</p>;
+  return <p className={cn("bb-banner__subtitle", className)}>{children}</p>;
 }
 BannerSubtitle.displayName = "CustomBanner.Subtitle";
 
 export function BannerFinePrint({ children, className }: SlotProps) {
-  return <p className={cn("bba-banner__fine-print", className)}>{children}</p>;
+  return <p className={cn("bb-banner__fine-print", className)}>{children}</p>;
 }
 BannerFinePrint.displayName = "CustomBanner.FinePrint";
 
@@ -270,8 +279,8 @@ export function BannerCTA(props: BannerCTAProps) {
   };
 
   const classes = cn(
-    "bba-banner__cta",
-    variant === "secondary" && "bba-banner__cta--secondary",
+    "bb-banner__cta",
+    variant === "secondary" && "bb-banner__cta--secondary",
     className,
   );
 
@@ -304,7 +313,14 @@ interface BannerCloseProps {
 
 function CloseIcon() {
   return (
-    <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false">
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 14 14"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
       <path
         d="M1 1 L13 13 M13 1 L1 13"
         stroke="currentColor"
@@ -321,7 +337,7 @@ export function BannerClose({ label = "Dismiss ad", className, children }: Banne
   return (
     <button
       type="button"
-      className={cn("bba-banner__close", className)}
+      className={cn("bb-banner__close", className)}
       aria-label={label}
       onClick={ctx.dismiss}
     >

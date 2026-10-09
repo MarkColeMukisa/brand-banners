@@ -13,9 +13,9 @@ describe("CustomBanner", () => {
     );
     const banner = screen.getByRole("complementary");
     expect(banner).toHaveAttribute("aria-label", "Advertisement");
-    expect(banner).toHaveAttribute("data-bba-id", "ad-1");
-    expect(banner).toHaveClass("bba-root");
-    expect(banner).toHaveClass("bba-banner");
+    expect(banner).toHaveAttribute("data-bb-id", "ad-1");
+    expect(banner).toHaveClass("bb-root");
+    expect(banner).toHaveClass("bb-banner");
     expect(screen.getByText("Hello")).toBeInTheDocument();
   });
 
@@ -25,10 +25,7 @@ describe("CustomBanner", () => {
         <CustomBanner.Title>Hi</CustomBanner.Title>
       </CustomBanner>,
     );
-    expect(screen.getByRole("complementary")).toHaveAttribute(
-      "aria-label",
-      "Sponsored — Save 20%",
-    );
+    expect(screen.getByRole("complementary")).toHaveAttribute("aria-label", "Sponsored — Save 20%");
   });
 
   it("composes slots into a full ad layout", () => {
@@ -43,9 +40,9 @@ describe("CustomBanner", () => {
         <CustomBanner.CTA label="Get it" href="/course" />
       </CustomBanner>,
     );
-    expect(screen.getByText("NEW")).toHaveClass("bba-banner__eyebrow");
-    expect(screen.getByText("Save 20%")).toHaveClass("bba-banner__title");
-    expect(screen.getByText("Limited time")).toHaveClass("bba-banner__subtitle");
+    expect(screen.getByText("NEW")).toHaveClass("bb-banner__eyebrow");
+    expect(screen.getByText("Save 20%")).toHaveClass("bb-banner__title");
+    expect(screen.getByText("Limited time")).toHaveClass("bb-banner__subtitle");
     expect(screen.getByRole("link", { name: "Get it" })).toHaveAttribute("href", "/course");
   });
 
@@ -116,13 +113,13 @@ describe("CustomBanner", () => {
     expect(onView.mock.calls[0]?.[0]).toMatchObject({ id: "ad-6", type: "CustomBanner" });
   });
 
-  it("explicit theme prop sets data-bba-theme on the root", () => {
+  it("explicit theme prop sets data-bb-theme on the root", () => {
     render(
       <CustomBanner id="ad-7" theme="dark">
         <CustomBanner.Title>t</CustomBanner.Title>
       </CustomBanner>,
     );
-    expect(screen.getByRole("complementary")).toHaveAttribute("data-bba-theme", "dark");
+    expect(screen.getByRole("complementary")).toHaveAttribute("data-bb-theme", "dark");
   });
 
   it("explicit prop overrides config (mergeConfigAndProps wiring)", () => {
@@ -138,6 +135,6 @@ describe("CustomBanner", () => {
     );
     const banner = screen.getByRole("complementary");
     expect(banner).toHaveAttribute("aria-label", "From prop");
-    expect(banner).toHaveAttribute("data-bba-theme", "dark");
+    expect(banner).toHaveAttribute("data-bb-theme", "dark");
   });
 });

@@ -8,28 +8,24 @@ describe("computeLayout", () => {
     expect(result.dataAttrs).toEqual({});
   });
 
-  it("sets data-bba-position for any explicit position", () => {
-    expect(computeLayout({ position: "top" }).dataAttrs["data-bba-position"]).toBe("top");
-    expect(computeLayout({ position: "corner" }).dataAttrs["data-bba-position"]).toBe(
-      "corner",
-    );
-    expect(computeLayout({ position: "inline" }).dataAttrs["data-bba-position"]).toBe(
-      "inline",
-    );
+  it("sets data-bb-position for any explicit position", () => {
+    expect(computeLayout({ position: "top" }).dataAttrs["data-bb-position"]).toBe("top");
+    expect(computeLayout({ position: "corner" }).dataAttrs["data-bb-position"]).toBe("corner");
+    expect(computeLayout({ position: "inline" }).dataAttrs["data-bb-position"]).toBe("inline");
   });
 
-  it("sets data-bba-sticky only for top/bottom + sticky=true", () => {
-    expect(computeLayout({ position: "top", sticky: true }).dataAttrs["data-bba-sticky"]).toBe(
+  it("sets data-bb-sticky only for top/bottom + sticky=true", () => {
+    expect(computeLayout({ position: "top", sticky: true }).dataAttrs["data-bb-sticky"]).toBe(
+      "true",
+    );
+    expect(computeLayout({ position: "bottom", sticky: true }).dataAttrs["data-bb-sticky"]).toBe(
       "true",
     );
     expect(
-      computeLayout({ position: "bottom", sticky: true }).dataAttrs["data-bba-sticky"],
-    ).toBe("true");
-    expect(
-      computeLayout({ position: "corner", sticky: true }).dataAttrs["data-bba-sticky"],
+      computeLayout({ position: "corner", sticky: true }).dataAttrs["data-bb-sticky"],
     ).toBeUndefined();
     expect(
-      computeLayout({ position: "top", sticky: false }).dataAttrs["data-bba-sticky"],
+      computeLayout({ position: "top", sticky: false }).dataAttrs["data-bb-sticky"],
     ).toBeUndefined();
   });
 
@@ -37,14 +33,14 @@ describe("computeLayout", () => {
     const r = computeLayout({ position: "corner", corner: "bottom-right", offset: 30 });
     expect(r.style.bottom).toBe("30px");
     expect(r.style.right).toBe("30px");
-    expect(r.dataAttrs["data-bba-corner"]).toBe("bottom-right");
+    expect(r.dataAttrs["data-bb-corner"]).toBe("bottom-right");
   });
 
   it("defaults corner to bottom-right and offset to 20", () => {
     const r = computeLayout({ position: "corner" });
     expect(r.style.bottom).toBe("20px");
     expect(r.style.right).toBe("20px");
-    expect(r.dataAttrs["data-bba-corner"]).toBe("bottom-right");
+    expect(r.dataAttrs["data-bb-corner"]).toBe("bottom-right");
   });
 
   it("supports all four corners", () => {
@@ -66,8 +62,6 @@ describe("computeLayout", () => {
     expect(computeLayout({ width: "full" }).style.width).toBe("100%");
     expect(computeLayout({ width: "80%" }).style.width).toBe("80%");
     expect(computeLayout({ width: "600px" }).style.width).toBe("600px");
-    expect(computeLayout({ width: "min(900px, 100%)" }).style.width).toBe(
-      "min(900px, 100%)",
-    );
+    expect(computeLayout({ width: "min(900px, 100%)" }).style.width).toBe("min(900px, 100%)");
   });
 });

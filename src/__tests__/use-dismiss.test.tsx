@@ -37,12 +37,12 @@ describe("useDismiss", () => {
     const storage = makeStorage();
     const { result } = renderHook(() => useDismiss({ adMeta, storage }));
     act(() => result.current.dismiss());
-    expect(storage.store.get("bba-dismissed:ad1")).toBe("1");
+    expect(storage.store.get("bb-dismissed:ad1")).toBe("1");
   });
 
   it("rehydrates dismissed=true from storage on mount", () => {
     const storage = makeStorage();
-    storage.setItem("bba-dismissed:ad1", "1");
+    storage.setItem("bb-dismissed:ad1", "1");
     const { result } = renderHook(() => useDismiss({ adMeta, storage }));
     expect(result.current.dismissed).toBe(true);
   });
@@ -59,15 +59,13 @@ describe("useDismiss", () => {
   it("accepts window.localStorage directly (Web Storage shape)", () => {
     const { result } = renderHook(() => useDismiss({ adMeta, storage: window.localStorage }));
     act(() => result.current.dismiss());
-    expect(window.localStorage.getItem("bba-dismissed:ad1")).toBe("1");
-    window.localStorage.removeItem("bba-dismissed:ad1");
+    expect(window.localStorage.getItem("bb-dismissed:ad1")).toBe("1");
+    window.localStorage.removeItem("bb-dismissed:ad1");
   });
 
   it("does nothing when disabled", () => {
     const onClose = vi.fn();
-    const { result } = renderHook(() =>
-      useDismiss({ adMeta, onClose, enabled: false }),
-    );
+    const { result } = renderHook(() => useDismiss({ adMeta, onClose, enabled: false }));
     act(() => result.current.dismiss());
     expect(result.current.dismissed).toBe(false);
     expect(onClose).not.toHaveBeenCalled();

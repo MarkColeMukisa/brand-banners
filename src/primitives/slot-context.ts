@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { StorageAdapter } from "../types/ad";
+import type { AdMeta, StorageAdapter } from "../types/ad";
 
 /**
  * Slot-level cascade carrier for values that can't ride along inside a
@@ -14,8 +14,13 @@ import type { StorageAdapter } from "../types/ad";
  */
 export interface SlotContextValue {
   storage?: StorageAdapter;
-  /** Pre-resolved per-ad storage key (already includes the slot's prefix). */
+  /**
+   * Pre-resolved storage key (already includes the slot's prefix): one key
+   * per ad, or one key shared by every ad when the slot dismisses as a whole.
+   */
   storageKey?: string;
+  /** Tells the slot a banner inside it was dismissed, so it can react. */
+  onDismiss?: (adMeta: AdMeta) => void;
 }
 
 export const SlotContext = createContext<SlotContextValue | null>(null);
