@@ -16,7 +16,9 @@ import { SlotContext, type SlotContextValue } from "../primitives/slot-context";
 import type { AdMeta, BannerConfig, Position, SizePreset, StorageAdapter } from "../types/ad";
 import type { ThemeMode } from "../types/theme";
 import { cn } from "../utils/cn";
+import { DISMISSED_VALUE, slotDismissKey } from "../utils/dismissal";
 import { computeLayout, type Corner } from "../utils/layout";
+import { isInWindow } from "../utils/schedule";
 import { BannerAd } from "./BannerAd";
 
 export interface RotateOptions {
@@ -99,6 +101,28 @@ export interface AdSlotProps {
    */
   dismissScope?: "ad" | "slot";
   /**
+   * What the server renders.
+   * - `"defer"` *(default)*: nothing. The slot appears on the client once
+   *   its stored dismissals have been read, so a banner the visitor closed is
+   *   never painted, not even for a frame. Server and first client render
+   *   agree (both empty), so there is no hydration mismatch.
+   * - `"render"`: the first ad, in the server HTML. A dismissed slot then
+   *   shows until hydration hides it, and `startsAt` / `endsAt` only apply
+   *   after hydration.
+   */
+  ssr?: "defer" | "render";
+  /**
+   * Milliseconds to wait, once the slot could show, before it does. With
+   * `showOnScroll`, whichever comes first. Unset with `showOnScroll` unset:
+   * shows at once.
+   */
+  showAfter?: number;
+  /**
+   * Show once this fraction (0–1) of the page has been scrolled. A page too
+   * short to scroll counts as read. With `showAfter`, whichever comes first.
+   */
+  showOnScroll?: number;
+  /**
    * Slot-level default for `layout`. Cascades into every child ad's config
    * unless the ad sets its own. Useful when one rotating slot of
    * `BrandedBanner` ads should all use the same layout (e.g. `"image-right"`).
@@ -127,8 +151,7 @@ export interface AdSlotProps {
   children?: ReactNode | ((config: BannerConfig, index: number) => ReactNode);
 }
 
-const DISMISSED_VALUE = "1";
-const NONE_DISMISSED: ReadonlySet<string> = new Set();
+const NONE_HIDDEN: ReadonlySet<string> = new Set();
 
 /** The ad's own `id`, or a positional fallback so id-less ads still get a stable key. */
 function adIdentityOf(config: BannerConfig, index: number): string {
@@ -143,15 +166,15 @@ function buildAdMeta(config: BannerConfig, fallbackIndex: number): AdMeta {
   };
 }
 
-/** First ad at or after `from` (wrapping) that hasn't been dismissed; `-1` if none. */
+/** First ad at or after `from` (wrapping) that isn't hidden; `-1` if none. */
 function firstVisibleIndex(
   list: readonly BannerConfig[],
-  dismissed: ReadonlySet<string>,
+  hidden: ReadonlySet<string>,
   from: number,
 ): number {
   for (let step = 0; step < list.length; step++) {
     const i = (from + step) % list.length;
-    if (!dismissed.has(adIdentityOf(list[i]!, i))) return i;
+    if (!hidden.has(adIdentityOf(list[i]!, i))) return i;
   }
   return -1;
 }
@@ -194,6 +217,9 @@ export function AdSlot(props: AdSlotProps) {
     storageKey,
     dismissible,
     dismissScope = "ad",
+    ssr = "defer",
+    showAfter,
+    showOnScroll,
     layout,
     size,
     theme,
@@ -207,8 +233,12 @@ export function AdSlot(props: AdSlotProps) {
   const [index, setIndex] = useState(initial);
   const [cycleCount, setCycleCount] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
-  const [dismissedIds, setDismissedIds] = useState(NONE_DISMISSED);
+  const [dismissedIds, setDismissedIds] = useState(NONE_HIDDEN);
   const [slotDismissed, setSlotDismissed] = useState(false);
+  // When the slot mounted on the client. `undefined` on the server and on
+  // the first client render, which is what keeps them in agreement.
+  const [mountedAt, setMountedAt] = useState<number | undefined>(undefined);
+  const [triggered, setTriggered] = useState(showAfter === undefined && showOnScroll === undefined);
 
   // Refs avoid stale closures inside the rotation `setInterval` AND keep the
   // effect from re-running every time a callback identity changes. Side
@@ -217,7 +247,7 @@ export function AdSlot(props: AdSlotProps) {
   const onCycleCompleteRef = useRef(onCycleComplete);
   const cycleCountRef = useRef(0);
   const indexRef = useRef(initial);
-  const dismissedIdsRef = useRef(dismissedIds);
+  const hiddenIdsRef = useRef(NONE_HIDDEN);
   useEffect(() => {
     onCycleCompleteRef.current = onCycleComplete;
   });
@@ -227,7 +257,7 @@ export function AdSlot(props: AdSlotProps) {
   const list = useMemo(() => ads ?? (ad ? [ad] : undefined), [ads, ad]);
 
   const keyPrefix = storageKey ? `${storageKey}:` : "";
-  const slotStorageKey = `${keyPrefix}bb-dismissed:slot${id ? `:${id}` : ""}`;
+  const slotStorageKey = slotDismissKey(id, storageKey);
 
   // Pick up dismissals remembered from earlier visits. A layout effect, so a
   // client-rendered app never paints an ad the visitor already closed.
@@ -256,16 +286,60 @@ export function AdSlot(props: AdSlotProps) {
     }
   }, [storage, list, dismissScope, dismissible, slotStorageKey, keyPrefix]);
 
+  // Runs in the same commit as the storage read above, so with `ssr="defer"`
+  // the first frame the slot can paint already knows what was dismissed.
+  useIsomorphicLayoutEffect(() => {
+    setMountedAt((prev) => prev ?? Date.now());
+  }, []);
+  const settled = ssr === "render" || mountedAt !== undefined;
+
+  // Dismissed ads and ads outside their `startsAt` / `endsAt` window both
+  // drop out of the rotation. Skipping them, rather than filtering `list`,
+  // keeps the positional keys of id-less ads stable.
+  const hiddenIds = useMemo(() => {
+    if (!list || mountedAt === undefined) return dismissedIds;
+    const outOfWindow: string[] = [];
+    list.forEach((config, i) => {
+      if (!isInWindow(config, mountedAt)) outOfWindow.push(adIdentityOf(config, i));
+    });
+    return outOfWindow.length === 0 ? dismissedIds : new Set([...dismissedIds, ...outOfWindow]);
+  }, [list, mountedAt, dismissedIds]);
+
   // The ad actually on screen: `index`, or the next one along if that ad
-  // has been dismissed. `-1` once every ad is gone.
+  // is hidden. `-1` once every ad is gone.
   const activeIndex =
     list && list.length > 0
-      ? firstVisibleIndex(list, dismissedIds, Math.min(index, list.length - 1))
+      ? firstVisibleIndex(list, hiddenIds, Math.min(index, list.length - 1))
       : -1;
   useEffect(() => {
     indexRef.current = activeIndex >= 0 ? activeIndex : index;
-    dismissedIdsRef.current = dismissedIds;
+    hiddenIdsRef.current = hiddenIds;
   });
+
+  // Nothing to show, so no `showAfter` / `showOnScroll` trigger is started.
+  const blocked = slotDismissed || (list !== undefined && list.length > 0 && activeIndex < 0);
+
+  useEffect(() => {
+    if (triggered || !settled || blocked) return;
+    const show = () => setTriggered(true);
+    const cleanups: (() => void)[] = [];
+    if (showAfter !== undefined) {
+      const timer = setTimeout(show, showAfter);
+      cleanups.push(() => clearTimeout(timer));
+    }
+    if (showOnScroll !== undefined) {
+      const check = () => {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        if (scrollable <= 0 || window.scrollY / scrollable >= showOnScroll) show();
+      };
+      check();
+      window.addEventListener("scroll", check, { passive: true });
+      cleanups.push(() => window.removeEventListener("scroll", check));
+    }
+    return () => cleanups.forEach((cleanup) => cleanup());
+  }, [triggered, settled, blocked, showAfter, showOnScroll]);
+
+  const visible = settled && triggered;
 
   // Resolve corner: array form advances with cycleCount; single value passes through.
   const cornerArray = useMemo<readonly Corner[] | undefined>(
@@ -284,16 +358,16 @@ export function AdSlot(props: AdSlotProps) {
   });
 
   useEffect(() => {
-    if (!list || !rotate || list.length <= 1) return;
+    if (!visible || !list || !rotate || list.length <= 1) return;
     if (reducedMotion) return;
     if (rotate.pauseOnHover && isHovering) return;
 
     const timer = setInterval(() => {
       const i = indexRef.current;
-      // Dismissed ads drop out of the rotation.
+      // Hidden ads drop out of the rotation.
       const others: number[] = [];
       list.forEach((config, n) => {
-        if (n !== i && !dismissedIdsRef.current.has(adIdentityOf(config, n))) others.push(n);
+        if (n !== i && !hiddenIdsRef.current.has(adIdentityOf(config, n))) others.push(n);
       });
       if (others.length === 0) return;
 
@@ -324,7 +398,7 @@ export function AdSlot(props: AdSlotProps) {
       }
     }, rotate.interval);
     return () => clearInterval(timer);
-  }, [list, rotate, reducedMotion, isHovering]);
+  }, [visible, list, rotate, reducedMotion, isHovering]);
 
   const activeConfig = list && activeIndex >= 0 ? list[activeIndex] : undefined;
   const activeIdentity = activeConfig ? adIdentityOf(activeConfig, activeIndex) : undefined;
@@ -343,6 +417,9 @@ export function AdSlot(props: AdSlotProps) {
     offset,
     width,
   });
+
+  // Deferred until mount, or waiting on `showAfter` / `showOnScroll`.
+  if (!visible) return null;
 
   let content: ReactNode = null;
   if (list && list.length > 0) {

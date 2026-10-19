@@ -77,6 +77,8 @@ To avoid a flash of unstyled banner in server-rendered apps, import the styleshe
 import "brand-banners/styles.css";
 ```
 
+On a server-rendered page the card is not in the HTML. It appears on the client once the stored dismissal has been read, so a card the visitor closed never flashes on load. `ssr="render"` puts the first ad in the server HTML instead, at the cost of that flash.
+
 ### `BrandBanners` props
 
 | Prop | Default | What it does |
@@ -91,8 +93,41 @@ import "brand-banners/styles.css";
 | `position` | `"corner"` | `"inline"` renders the card in the page flow, for a sidebar. |
 | `id` | none | Names the slot. Set it if a page mounts more than one, so their dismissals stay separate. |
 | `theme` | `"system"` | `"light"`, `"dark"` or `"system"`. |
+| `showAfter` | none | Milliseconds to wait before the card appears. See [When it shows](#when-it-shows). |
+| `showOnScroll` | none | Show once this fraction (0–1) of the page has been scrolled. |
+| `ssr` | `"defer"` | `"defer"` keeps the card out of the server HTML; `"render"` includes the first ad. |
 | `onView`, `onClick`, `onClose` | none | [Analytics callbacks](#analytics). |
 | `className`, `style` | none | Applied to the slot wrapper. |
+
+### When it shows
+
+```tsx
+<BrandBanners
+  ads={ADS}
+  showAfter={12_000}   // 12 s after the page loads…
+  showOnScroll={0.35}  // …or once 35% of it is read, whichever comes first
+/>
+```
+
+- With neither set, the card shows as soon as the page has loaded.
+- A page too short to scroll counts as read for `showOnScroll`.
+- A closed card starts neither, and rotation starts when the card appears.
+- Reduced motion doesn't change the timing.
+
+To keep the card off some pages, don't render it there. In the Next.js App Router:
+
+```tsx
+"use client";
+import { usePathname } from "next/navigation";
+
+const QUIET_ON = ["/start-project", "/checkout"];
+
+export function Promos() {
+  const pathname = usePathname();
+  if (QUIET_ON.some((page) => pathname.startsWith(page))) return null;
+  return <BrandBanners ads={ADS} />;
+}
+```
 
 ### An ad
 
@@ -106,10 +141,14 @@ interface BannerConfig {
   cta?: { label: string; href?: string; target?: "_blank" | "_self"; variant?: "primary" | "secondary" };
   image?: string | { src: string; alt?: string; width?: number; height?: number; fit?: "contain" | "cover" };
   brandColors?: { bg?: string; primary?: string; accent?: string; text?: string };
+  startsAt?: string;    // ISO date or date-time; left out of the rotation before it
+  endsAt?: string;      // left out after it
 }
 ```
 
-It is plain data, so the lineup can come from a JSON file or a CMS. Transparent square images (PNG or SVG) look best. `brandColors.bg` to `primary` makes the background gradient, `accent` colours the CTA and eyebrow, and `text` colours the copy.
+It is plain data, so the lineup can come from a JSON file or a CMS.
+
+`startsAt` and `endsAt` take an ad out of the rotation outside its window, for an intake or a sale that should end by itself. A date alone (`"2026-11-30"`) means the start or the end of that day in the visitor's time zone. The window is checked in the browser when the card mounts, so the server's clock doesn't matter. With no ad in its window, nothing is shown. Transparent square images (PNG or SVG) look best. `brandColors.bg` to `primary` makes the background gradient, `accent` colours the CTA and eyebrow, and `text` colours the copy.
 
 ---
 
@@ -183,6 +222,17 @@ In an `AdSlot`, `dismissScope` decides what the close button means:
 - `"slot"`: the whole slot, whichever ad was showing. This is what `BrandBanners` uses.
 
 Storage keys are `bb-dismissed:<ad id>` per ad and `bb-dismissed:slot[:<slot id>]` per slot. `storageKey` on an `AdSlot` adds a prefix.
+
+To ask whether a slot has been closed, without depending on the key format:
+
+```ts
+import { createExpiringStorage, isSlotDismissed } from "brand-banners";
+
+isSlotDismissed({ storage: createExpiringStorage({ days: 7 }) });     // BrandBanners
+isSlotDismissed({ id: "promos", storage, storageKey: "site" });      // an AdSlot with id + storageKey
+```
+
+It returns `false` when `storage` is `undefined`, as it is on the server, so call it after mount.
 
 ## Analytics
 

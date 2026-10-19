@@ -54,8 +54,10 @@ export {
   createExpiringStorage,
   createForeverStorage,
   createSessionStorage,
+  isSlotDismissed,
   mergeConfigAndProps,
   type ClassValue,
+  type IsSlotDismissedOptions,
 } from "./utils";
 
 // Types
