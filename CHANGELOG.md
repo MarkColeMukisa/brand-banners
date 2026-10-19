@@ -19,7 +19,7 @@ All notable changes to `brand-banners` are documented here. Format adapted from 
 
 - On server-rendered pages (Next.js, Remix, Astro), a closed `BrandBanners` card showed for a moment on every page load until hydration hid it ([#1](https://github.com/MarkColeMukisa/brand-banners/issues/1)).
 
-## [0.1.0] — unreleased
+## [0.1.0] — 2026-10-09
 
 First release under the `brand-banners` name. Forked from `beautiful-banner-ads` 0.4.0 by MUKE JOHNBAPTIST.
 
