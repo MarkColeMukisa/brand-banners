@@ -2,7 +2,7 @@
 
 All notable changes to `brand-banners` are documented here. Format adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows [SemVer](https://semver.org/).
 
-## [0.2.0] — unreleased
+## [0.2.0] — 2026-10-19
 
 ### Added
 
