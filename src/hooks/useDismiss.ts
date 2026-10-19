@@ -26,8 +26,9 @@ const DISMISSED_VALUE = "1";
  * Initial render always returns `dismissed: false` to avoid SSR hydration
  * mismatches — the prior-dismissal lookup runs in a layout effect, so a
  * client-rendered app hides an already-dismissed banner before first paint.
- * Server-rendered HTML still contains the banner until hydration; gate the
- * render in the host if that flash matters.
+ * Server-rendered HTML still contains the banner until hydration. Inside an
+ * `AdSlot` (and `BrandBanners`) the default `ssr="defer"` avoids that flash;
+ * for a standalone banner, gate the render in the host if it matters.
  */
 export function useDismiss({
   adMeta,

@@ -2,6 +2,23 @@
 
 All notable changes to `brand-banners` are documented here. Format adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows [SemVer](https://semver.org/).
 
+## [0.2.0] — unreleased
+
+### Added
+
+- **`showAfter` and `showOnScroll`** on `BrandBanners` and `AdSlot`: delay the first appearance by a time, a share of the page scrolled, or whichever comes first. A dismissed slot starts neither, and rotation waits until the slot shows.
+- **`startsAt` / `endsAt` on `BannerConfig`**: an ad leaves the rotation outside its window. A bare date is the start or end of that day in the visitor's time zone. Checked on the client at mount; with no ad in its window the slot renders nothing.
+- **`isSlotDismissed({ id?, storage, storageKey? })`**: a supported way to ask whether a slot has been closed, instead of reading `bb-dismissed:slot` directly.
+- **`ssr` on `BrandBanners` and `AdSlot`**: `"defer"` (default) or `"render"`.
+
+### Changed
+
+- **Slots render nothing on the server by default (`ssr="defer"`).** They appear on the client once stored dismissals have been read, so a closed banner is never painted on a server-rendered page, not even for a frame. `ssr="render"` keeps the old behaviour for slots whose markup should be in the server HTML.
+
+### Fixed
+
+- On server-rendered pages (Next.js, Remix, Astro), a closed `BrandBanners` card showed for a moment on every page load until hydration hid it ([#1](https://github.com/MarkColeMukisa/brand-banners/issues/1)).
+
 ## [0.1.0] — unreleased
 
 First release under the `brand-banners` name. Forked from `beautiful-banner-ads` 0.4.0 by MUKE JOHNBAPTIST.

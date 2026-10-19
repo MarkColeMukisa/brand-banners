@@ -143,4 +143,16 @@ export interface BannerConfig {
   offset?: number;
   /** Override the accessible label. Defaults to `"Advertisement"`. */
   ariaLabel?: string;
+  /**
+   * In an `AdSlot`, shown from this moment (ISO date or date-time). Before
+   * it, the ad is left out of the rotation. A date alone means the start of
+   * that day in the visitor's time zone. Checked on the client when the
+   * slot mounts.
+   */
+  startsAt?: string;
+  /**
+   * In an `AdSlot`, shown until this moment. After it, the ad is left out.
+   * A date alone means the end of that day in the visitor's time zone.
+   */
+  endsAt?: string;
 }

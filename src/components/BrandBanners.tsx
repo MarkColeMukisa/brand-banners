@@ -43,6 +43,22 @@ export interface BrandBannersProps {
   layout?: "image-left" | "image-right" | "image-bg";
   /** Theme for every ad. Falls back to `ThemeProvider`, then `"system"`. */
   theme?: ThemeMode;
+  /**
+   * Milliseconds to wait before the card appears. With `showOnScroll`,
+   * whichever comes first. Default: shows at once.
+   */
+  showAfter?: number;
+  /**
+   * Show once this fraction (0–1) of the page has been scrolled. With
+   * `showAfter`, whichever comes first.
+   */
+  showOnScroll?: number;
+  /**
+   * `"defer"` *(default)* renders nothing on the server and shows the card
+   * once the client knows whether it was closed, so a closed card never
+   * flashes. `"render"` puts the first ad in the server HTML.
+   */
+  ssr?: "defer" | "render";
   /** Fires each time an ad becomes at least half visible. */
   onView?: OnView;
   /** Fires when an ad's call-to-action is activated. */
@@ -76,6 +92,9 @@ export function BrandBanners(props: BrandBannersProps) {
     width,
     layout = "image-right",
     theme,
+    showAfter,
+    showOnScroll,
+    ssr,
     onView,
     onClick,
     onClose,
@@ -111,6 +130,9 @@ export function BrandBanners(props: BrandBannersProps) {
       storage={storage}
       dismissible={dismissDays !== false}
       dismissScope="slot"
+      ssr={ssr}
+      showAfter={showAfter}
+      showOnScroll={showOnScroll}
       layout={layout}
       size="card"
       theme={theme}
