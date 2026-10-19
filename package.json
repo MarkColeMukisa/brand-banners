@@ -5,9 +5,6 @@
   "type": "module",
   "license": "MIT",
   "author": "Mark Cole MUKISA <markcole683@gmail.com>",
-  "contributors": [
-    "MUKE JOHNBAPTIST (original author of beautiful-banner-ads)"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MarkColeMukisa/brand-banners.git"
