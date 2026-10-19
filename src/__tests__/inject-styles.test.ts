@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
+import pkg from "../../package.json";
 import { __resetInjectStateForTests, injectStyles } from "../theme/inject-styles";
 
 describe("injectStyles", () => {
@@ -19,7 +20,7 @@ describe("injectStyles", () => {
   it("tags the injected element with the package version for debugging", () => {
     injectStyles();
     const tag = document.getElementById("bb-injected-styles");
-    expect(tag?.getAttribute("data-bb-version")).toBe("0.1.0");
+    expect(tag?.getAttribute("data-bb-version")).toBe(pkg.version);
   });
 
   it("is idempotent — repeated calls produce a single tag", () => {

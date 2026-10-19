@@ -21,7 +21,7 @@ All notable changes to `brand-banners` are documented here. Format adapted from 
 
 ## [0.1.0] — 2026-10-09
 
-First release under the `brand-banners` name. Forked from `beautiful-banner-ads` 0.4.0 by MUKE JOHNBAPTIST.
+First release under the `brand-banners` name. Forked from `beautiful-banner-ads` 0.4.0.
 
 ### Added
 
@@ -67,7 +67,7 @@ The initial public release. Everything in `project-description.md` §14's Defini
 - **SSR-safe**: no `window` / `document` at module top level; matchMedia / IntersectionObserver only touched in effects.
 - **Tree-shakeable**: ESM-first, `sideEffects: ["./dist/styles.css", "**/*.css"]`, no top-level imports drag in unused components.
 - **Build output**: ESM + CJS + `.d.ts` / `.d.cts` for both `import` and `require`, sourcemaps, `dist/styles.css`. Total tarball ≈ 86 KB packed.
-- **MIT licensed** © MUKE JOHNBAPTIST.
+- **MIT licensed**.
 
 ### Tests
 

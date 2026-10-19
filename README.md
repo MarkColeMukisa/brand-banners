@@ -7,8 +7,6 @@
 
 `brand-banners` puts a rotating promo card in the corner of your site: a course you sell, a product you built, a brand you want people to visit. You pass it an array of ads and mount it once. It rotates them, lets visitors close it, remembers that for a week, and looks the same on any page it is dropped into.
 
-It is a fork of [beautiful-banner-ads](https://github.com/MUKE-coder/beautiful-banner-ads) by MUKE JOHNBAPTIST, reworked so that integrating it takes one component and no CSS. See [Credits](#credits).
-
 ---
 
 ## Install
@@ -339,8 +337,8 @@ cd examples/playground && npm install && npm run dev
 
 ## Credits
 
-`brand-banners` builds on [beautiful-banner-ads](https://github.com/MUKE-coder/beautiful-banner-ads) by **MUKE JOHNBAPTIST**, who designed the components, the token system and the original implementation. This fork is maintained by **Mark Cole MUKISA**.
+`brand-banners` is built and maintained by **Mark Cole MUKISA** ([@MarkColeMukisa](https://github.com/MarkColeMukisa)).
 
 ## License
 
-[MIT](./LICENSE) © MUKE JOHNBAPTIST, Mark Cole MUKISA
+[MIT](./LICENSE) © Mark Cole MUKISA
