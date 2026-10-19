@@ -2,6 +2,15 @@
 
 All notable changes to `brand-banners` are documented here. Format adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows [SemVer](https://semver.org/).
 
+## [0.2.1] — 2026-10-20
+
+No changes to the package code; the first release published by CI.
+
+### Changed
+
+- Releases publish from GitHub Actions through npm trusted publishing, with a provenance attestation. The release run stops if the tag doesn't match `package.json`, and skips a version already on npm.
+- Every pull request and push to `main` is typechecked, linted, tested and built on Node 20, 22 and 24.
+
 ## [0.2.0] — 2026-10-19
 
 ### Added

@@ -1,6 +1,6 @@
 {
   "name": "brand-banners",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Drop-in promo banners for your own courses, products and brands. One React component for a rotating corner card, plus strips, branded and media banners. Works in Vite, Next.js and any React app; no ad network, no tracking.",
   "type": "module",
   "license": "MIT",
